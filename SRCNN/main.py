@@ -1,0 +1,49 @@
+from model import SRCNN
+from utils import input_setup
+
+import numpy as np
+import tensorflow as tf
+
+import pprint
+import os
+
+flags = tf.app.flags
+flags.DEFINE_integer("epoch", 15000, "Number of epoch [15000]")
+flags.DEFINE_integer("batch_size", 64, "The size of batch images [128]")
+flags.DEFINE_integer("image_size", 351, "The size of image to use [33]")#258 150
+flags.DEFINE_integer("label_size", 339, "The size of label to produce [21]")#246 138
+flags.DEFINE_float("learning_rate", 1e-4, "The learning rate of gradient descent algorithm [1e-4]")
+flags.DEFINE_integer("c_dim", 1, "Dimension of image color. [1]")
+flags.DEFINE_integer("scale", 3, "The size of scale factor for preprocessing input image [3]")
+flags.DEFINE_integer("stride", 14, "The size of stride to apply input image [14]")
+flags.DEFINE_string("checkpoint_dir", "checkpoint", "Name of checkpoint directory [checkpoint]")
+flags.DEFINE_string("sample_dir", "sample", "Name of sample directory [sample]")
+flags.DEFINE_boolean("is_train", False, "True for training, False for testing [True]")
+flags.DEFINE_integer("model", 25, "chooise a model")
+FLAGS = flags.FLAGS
+
+pp = pprint.PrettyPrinter()
+
+def main(_):
+  pp.pprint(flags.FLAGS.__flags)
+
+  if not os.path.exists(FLAGS.checkpoint_dir):
+    os.makedirs(FLAGS.checkpoint_dir)
+  if not os.path.exists(FLAGS.sample_dir):
+    os.makedirs(FLAGS.sample_dir)
+  os.environ["CUDA_VISIBLE_DEVICES"]="0"
+  config = tf.ConfigProto(allow_soft_placement=True)
+  with tf.device('/gpu:0'):
+    with tf.Session(config=config) as sess:
+        srcnn = SRCNN(sess,
+                      image_size=FLAGS.image_size,
+                      label_size=FLAGS.label_size,
+                      batch_size=FLAGS.batch_size,
+                      c_dim=FLAGS.c_dim,
+                      checkpoint_dir=FLAGS.checkpoint_dir,
+                      sample_dir=FLAGS.sample_dir,
+                      config=FLAGS)
+        srcnn.train(FLAGS)
+    
+if __name__ == '__main__':
+  tf.app.run()

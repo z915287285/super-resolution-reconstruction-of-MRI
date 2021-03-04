@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData">
+    <serverData>
+      <paths name="CUD">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/SRCNN-CMQ-MRI" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+          <excludedPaths>
+            <excludedPath path="/SRCNN-CMQ-MRI/rawdata" />
+            <excludedPath path="/SRCNN-CMQ-MRI/Train" />
+            <excludedPath path="/SRCNN-CMQ-MRI/Test" />
+            <excludedPath path="/SRCNN-CMQ-MRI/checkpoint/data_train.h5" />
+            <excludedPath local="true" path="$PROJECT_DIR$/testimage" />
+          </excludedPaths>
+        </serverdata>
+      </paths>
+    </serverData>
+  </component>
+</project>
